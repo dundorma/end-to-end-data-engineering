@@ -1,0 +1,1 @@
+p = {'city_name': 'Jakarta', 'country_code': 'ID', 'data': [{'aqi': 84, 'co': 177, 'mold_level': 0, 'no2': 5, 'o3': 112, 'pm10': 37, 'pm25': 27.75, 'pollen_level_grass': 0, 'pollen_level_tree': 0, 'pollen_level_weed': 0, 'predominant_pollen_type': 'Molds', 'so2': 31}], 'lat': -6.2, 'lon': 106.8167, 'state_code': '04', 'timezone': 'Asia/Jakarta'}
