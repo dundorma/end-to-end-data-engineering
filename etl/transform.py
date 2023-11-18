@@ -60,16 +60,6 @@ if __name__ == "__main__":
   df = replace_outliers_with_mean_adjacent(df, max_val)
 
   # save df to csv file
-  # saveToCSV(df)
-  postgresql_url = "jdbc:postgresql://localhost:5432/sayangbayi"
-  properties = {
-      "user": "postgres",
-      "password": "0000",
-      "driver": "org.postgresql.Driver"
-  }
-
-  # Write DataFrame to PostgreSQL table
-  table_name = "air_quality"
-  df.write.jdbc(url=postgresql_url, table=table_name, mode="overwrite", properties=properties)
+  saveToCSV(df)
 
 # Still error when saaving csv files or should be transform
