@@ -10,11 +10,11 @@ def saveToCSV(data) :
   raw_data_folder = os.path.join(current_directory, '../raw_data')
   csv_file_path = os.path.join(raw_data_folder, 'air_quality_data.csv')
 
-  mode = 'a' if os.path.exists(csv_file_path) else 'w'
+  (header, mode) = (False, 'a') if os.path.exists(csv_file_path) else (True, 'w')
 
   try:
     # Save the DataFrame to a CSV file
-    df.to_csv(csv_file_path, index=False, mode= mode)
+    df.to_csv(csv_file_path, index=False, mode= mode, header = header)
     print(f"Data successfully saved to {csv_file_path}")
   except IOError as e:
     print(f"Error while saving data: {e}")

@@ -10,11 +10,11 @@ def saveToCSV(data) :
   raw_data_folder = os.path.join(current_directory, '../raw_data')
   csv_file_path = os.path.join(raw_data_folder, 'traffic_jam_data.csv')
 
-  mode = 'a' if os.path.exists(csv_file_path) else 'w'
+  (header, mode) = (False, 'a') if os.path.exists(csv_file_path) else (True, 'w')
 
   try:
     # Save the DataFrame to a CSV file
-    df.to_csv(csv_file_path, index=False, mode= mode)
+    df.to_csv(csv_file_path, index=False, mode= mode, header = header)
     print(f"Data successfully saved to {csv_file_path}")
   except IOError as e:
     print(f"Error while saving data: {e}")
@@ -35,7 +35,7 @@ def fetchData(api):
 if __name__ == "__main__":
   trafficJams = {
     'url': 'https://waze.p.rapidapi.com/alerts-and-jams',
-    'params' : {"bottom_left":"-6.37477,106.6651","top_right":"-6.05441,106.9804","max_alerts":"20","max_jams":"20"}, 
+    'params' : {"bottom_left":"-6.37477,106.6651","top_right":"-6.05441,106.9804","max_alerts":"20","max_jams":"1000"}, 
     'headers' : {
     	"X-RapidAPI-Key": "37757523d9mshedf13855fb8cf03p11c892jsnaafe180e14ab",
     	"X-RapidAPI-Host": "waze.p.rapidapi.com"
