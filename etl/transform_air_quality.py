@@ -35,7 +35,7 @@ if __name__ == "__main__":
   spark = SparkSession.builder.appName("CSV Reader").getOrCreate()
 
   # Read CSV file into a Spark DataFrame
-  file_path = "./raw_data/air_quality_data.csv"
+  file_path = "../raw_data/air_quality_data.csv"
   df = spark.read.csv(file_path, header=True, inferSchema=True)
 
   # drop unecessary columns
