@@ -60,19 +60,6 @@ if __name__ == "__main__":
   # drop duplicates
   df = df.dropDuplicates()
 
-  # consistent dtypes
-  # dtypes = {
-  #   'jam_id': 'integer', 
-  #   'type': 'string', 
-  #   'level': 'integer',
-  #   'severity': 'integer', 
-  #   'speed_kmh': 'double', 
-  #   'length_meters': 'integer',
-  #   'delay_seconds': 'integer',
-  #   'timestamp_utc': 'timestamp',
-  #   'country': 'string',
-  #   'city': 'string',
-  #   'street': 'string'}
   dtypes = {
     'jam_id': 'integer', 
     'type': 'string', 
@@ -104,7 +91,7 @@ if __name__ == "__main__":
   # df = replace_outliers_with_mean_adjacent(df, max_val)
 
   # save df to csv file
-  df.printSchema()
-  df.show()
+  saveToCSV(df)
+  spark.stop()
 
 # Still error when saaving csv files or should be transform
