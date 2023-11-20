@@ -12,13 +12,13 @@ def loadPostgre(df, url, table, properties):
 
 
 # JDBC URL for your PostgreSQL database
-jdbc_url = "jdbc:postgresql://localhost:5432/your_database"
+jdbc_url = "jdbc:postgresql://http://rekdat.postgres.database.azure.com:5432/rekdat"
 
 # Properties to set for the PostgreSQL connection
 # Replace 'username' and 'password' with your PostgreSQL credentials
 properties = {
-    "user": "username",
-    "password": "password",
+    "user": "kelompokq@rekdat",
+    "password": "qbsPhPKUZqPtKdVj8U8mEhXgmGtfRCjerZchhGgyNPdyFSPk3r982ED3JE3KwkaG",
     "driver": "org.postgresql.Driver"
 }
 
