@@ -32,7 +32,7 @@ def saveToCSV(df) :
 # Transformation prcess start
 if __name__ == "__main__":
   # Create a SparkSession
-  spark = SparkSession.builder.appName("CSV Reader").getOrCreate()
+  spark = SparkSession.builder.appName("Transform Air Quality").getOrCreate()
 
   # Read CSV file into a Spark DataFrame
   file_path = "../raw_data/air_quality_data.csv"
