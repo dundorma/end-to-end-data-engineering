@@ -38,5 +38,14 @@ transform_traffic_task = PythonOperator(
     dag=etl_dag
 )
 
+load_task = PythonOperator(
+    task_id="etl_load",
+    python_callable=etl_load.main,
+    dag=etl_dag
+)
+
 extract_air_task >> transform_air_task
 extract_traffic_task >> transform_traffic_task
+
+transform_air_task >> load_task
+transform_traffic_task >> load_task

@@ -26,7 +26,7 @@ def main():
 
   # Specify the table name in the database to write the DataFrame
   table_name = ['air_quality', 'traffic_jam']
-  file_path = ["../transform_data/air_quality_data.csv", "../transform_data/traffic_jam_data.csv"]
+  file_path = ["/opt/airflow/transform_data/air_quality_data.csv", "/opt/airflow/transform_data/traffic_jam_data.csv"]
 
   for path, table in file_path, table_name:
     df = spark.read.csv(path, header=True, inferSchema=True)
