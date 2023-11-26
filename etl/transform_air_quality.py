@@ -24,7 +24,7 @@ def consistent_dtype(df, dtype):
 def saveToCSV(df) :
     try:
         # Save the DataFrame to a CSV file
-        output_path = "transform_data/air_quality_data.csv"
+        output_path = "/opt/airflow/transform_data/air_quality_data.csv"
         df.write.csv(output_path, header=True, mode='append')
         print(f"Data successfully saved to {output_path}")
     except IOError as e:
