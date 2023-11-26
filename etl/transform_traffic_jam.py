@@ -34,7 +34,7 @@ def main():
   spark = SparkSession.builder.appName("Transform Traffic Jam").getOrCreate()
 
   # Read CSV file into a Spark DataFrame
-  file_path = "../raw_data/traffic_jam_data.csv"
+  file_path = "/opt/airflow/raw_data/traffic_jam_data.csv"
   df = spark.read.csv(file_path, header=True, inferSchema=True)
 
   # drop unecessary columns
