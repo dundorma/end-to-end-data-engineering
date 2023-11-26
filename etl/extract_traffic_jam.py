@@ -30,7 +30,7 @@ def fetchData(api):
   except requests.RequestException as e:
       print(f"Request encountered an error: {e}")
 
-if __name__ == "__main__":
+def main():
   trafficJams = {
     'url': 'https://waze.p.rapidapi.com/alerts-and-jams',
     'params' : {"bottom_left":"-6.37477,106.6651","top_right":"-6.05441,106.9804","max_alerts":"20","max_jams":"1000"}, 
@@ -41,3 +41,6 @@ if __name__ == "__main__":
   }
   data = fetchData(trafficJams)
   saveToCSV(data)
+
+if __name__ == "__main__":
+  main()

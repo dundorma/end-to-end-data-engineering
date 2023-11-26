@@ -1,7 +1,5 @@
 from pyspark.sql import SparkSession
 
-# Create a SparkSession
-spark = SparkSession.builder.appName("Load Data to PostgreSQL").getOrCreate()
 
 def loadPostgre(df, url, table, properties):
   try:
@@ -11,24 +9,31 @@ def loadPostgre(df, url, table, properties):
     print(f"Error during data load {table}: {str(e)}")
 
 
-# JDBC URL for your PostgreSQL database
-jdbc_url = "jdbc:postgresql://http://rekdat.postgres.database.azure.com:5432/rekdat"
+def main():
+  # Create a SparkSession
+  spark = SparkSession.builder.appName("Load Data to PostgreSQL").getOrCreate()
 
-# Properties to set for the PostgreSQL connection
-# Replace 'username' and 'password' with your PostgreSQL credentials
-properties = {
-    "user": "kelompokq@rekdat",
-    "password": "qbsPhPKUZqPtKdVj8U8mEhXgmGtfRCjerZchhGgyNPdyFSPk3r982ED3JE3KwkaG",
-    "driver": "org.postgresql.Driver"
-}
+  # JDBC URL for your PostgreSQL database
+  jdbc_url = "jdbc:postgresql://http://rekdat.postgres.database.azure.com:5432/rekdat"
 
-# Specify the table name in the database to write the DataFrame
-table_name = ['air_quality', 'traffic_jam']
-file_path = ["../transform_data/air_quality_data.csv", "../transform_data/traffic_jam_data.csv"]
+  # Properties to set for the PostgreSQL connection
+  # Replace 'username' and 'password' with your PostgreSQL credentials
+  properties = {
+      "user": "kelompokq@rekdat",
+      "password": "qbsPhPKUZqPtKdVj8U8mEhXgmGtfRCjerZchhGgyNPdyFSPk3r982ED3JE3KwkaG",
+      "driver": "org.postgresql.Driver"
+  }
 
-for path, table in file_path, table_name:
-  df = spark.read.csv(path, header=True, inferSchema=True)
-  loadPostgre(df, jdbc_url, table, properties)
+  # Specify the table name in the database to write the DataFrame
+  table_name = ['air_quality', 'traffic_jam']
+  file_path = ["../transform_data/air_quality_data.csv", "../transform_data/traffic_jam_data.csv"]
 
-# Stop the SparkSession
-spark.stop()
+  for path, table in file_path, table_name:
+    df = spark.read.csv(path, header=True, inferSchema=True)
+    loadPostgre(df, jdbc_url, table, properties)
+
+  # Stop the SparkSession
+  spark.stop()
+
+if __name__ == "__main__":
+    main()

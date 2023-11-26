@@ -30,7 +30,7 @@ def fetchData(api):
   except requests.RequestException as e:
       print(f"Request encountered an error: {e}")
 
-if __name__ == "__main__":
+def main():
   airPolution = {
   'url': 'https://air-quality.p.rapidapi.com/history/airquality',
   'params' : {"lon":"106.816666","lat":"-6.200000"}, 
@@ -41,3 +41,6 @@ if __name__ == "__main__":
   }
   data = fetchData(airPolution)
   saveToCSV(data)
+
+if __name__ == "__main__":
+    main()
