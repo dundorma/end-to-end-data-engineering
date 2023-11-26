@@ -17,12 +17,12 @@ etl_dag = DAG(
 extract_air_task = PythonOperator(
     task_id="e_air",
     python_callable=extract_air_quality.main,
-    dag=test_dag
+    dag=etl_dag
 )
 
 extract_traffic_task = PythonOperator(
     task_id="e_traffic",
     python_callable=extract_traffic_jam.main,
-    dag=test_dag
+    dag=etl_dag
 )
 
