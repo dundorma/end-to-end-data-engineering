@@ -29,9 +29,8 @@ def saveToCSV(df) :
   except IOError as e:
     print(f"Error while saving data: {e}")
 
-# Transformation prcess start
-if __name__ == "__main__":
-  # Create a SparkSession
+def main():
+    # Create a SparkSession
   spark = SparkSession.builder.appName("Transform Traffic Jam").getOrCreate()
 
   # Read CSV file into a Spark DataFrame
@@ -95,3 +94,7 @@ if __name__ == "__main__":
   spark.stop()
 
 # Still error when saaving csv files or should be transform
+
+# Transformation prcess start
+if __name__ == "__main__":
+  main()
