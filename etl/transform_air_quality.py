@@ -22,45 +22,47 @@ def consistent_dtype(df, dtype):
         df = df.withColumn(col_name, col(col_name).cast(type))
     return df
 def saveToCSV(df) :
-  try:
-    # Save the DataFrame to a CSV file
-    df.write.csv('/transform_data', header=True, mode='append')
-    print(f"Data successfully saved")
-  except IOError as e:
-    print(f"Error while saving data: {e}")
+    try:
+        # Save the DataFrame to a CSV file
+        df.write.csv('/transform_data', header=True, mode='append')
+        print(f"Data successfully saved")
+    except IOError as e:
+        print(f"Error while saving data: {e}")
 
 # Transformation prcess start
+def main():
+    # Create a SparkSession
+    spark = SparkSession.builder.appName("Transform Air Quality").getOrCreate()
+
+    # Read CSV file into a Spark DataFrame
+    file_path = "../raw_data/air_quality_data.csv"
+    df = spark.read.csv(file_path, header=True, inferSchema=True)
+
+    # drop unecessary columns
+    columns_to_drop = ['datetime', 'timestamp_local', 'ts']
+    df = df.drop(*columns_to_drop)
+
+    # drom row with all missing value
+    df = df.dropna(how ='all')
+
+    # drop duplicates
+    df = df.dropDuplicates()
+
+    # consistent dtypes
+    dtypes = {'aqi': 'integer', 'co':'double', 'no2': 'double', 'o3': 'double', 'pm10': 'double', 'pm25': 'double', 'so2': 'double', 'timestamp_utc': 'timestamp'}
+    df = consistent_dtype(df, dtypes)
+
+    # consistent datetime format
+    df = df.withColumn('timestamp_utc', to_timestamp('timestamp_utc', 'yyyy-MM-dd HH:mm:ss'))
+
+    # handle Disgusting Values
+    max_val = {'co':150000.0, 'no2': 3840.0, 'o3': 1200.0, 'pm10': 600.0, 'pm25': 500.0, 'so2': 800.0}
+    df = replace_outliers_with_mean_adjacent(df, max_val)
+
+    # save df to csv file
+    saveToCSV(df)
+    spark.stop()
+
 if __name__ == "__main__":
-  # Create a SparkSession
-  spark = SparkSession.builder.appName("Transform Air Quality").getOrCreate()
-
-  # Read CSV file into a Spark DataFrame
-  file_path = "../raw_data/air_quality_data.csv"
-  df = spark.read.csv(file_path, header=True, inferSchema=True)
-
-  # drop unecessary columns
-  columns_to_drop = ['datetime', 'timestamp_local', 'ts']
-  df = df.drop(*columns_to_drop)
-
-  # drom row with all missing value
-  df = df.dropna(how ='all')
-
-  # drop duplicates
-  df = df.dropDuplicates()
-
-  # consistent dtypes
-  dtypes = {'aqi': 'integer', 'co':'double', 'no2': 'double', 'o3': 'double', 'pm10': 'double', 'pm25': 'double', 'so2': 'double', 'timestamp_utc': 'timestamp'}
-  df = consistent_dtype(df, dtypes)
-
-  # consistent datetime format
-  df = df.withColumn('timestamp_utc', to_timestamp('timestamp_utc', 'yyyy-MM-dd HH:mm:ss'))
-
-  # handle Disgusting Values
-  max_val = {'co':150000.0, 'no2': 3840.0, 'o3': 1200.0, 'pm10': 600.0, 'pm25': 500.0, 'so2': 800.0}
-  df = replace_outliers_with_mean_adjacent(df, max_val)
-
-  # save df to csv file
-  saveToCSV(df)
-  spark.stop()
-
+    main()
 # Still error when saaving csv files
