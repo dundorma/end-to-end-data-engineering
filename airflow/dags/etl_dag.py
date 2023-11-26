@@ -25,3 +25,18 @@ extract_traffic_task = PythonOperator(
     python_callable=extract_traffic_jam.main,
     dag=etl_dag
 )
+
+transform_air_task = PythonOperator(
+    task_id="t_air",
+    python_callable=transform_air_quality.main,
+    dag=etl_dag
+)
+
+transform_traffic_task = PythonOperator(
+    task_id="t_traffic",
+    python_callable=transform_traffic_jam.main,
+    dag=etl_dag
+)
+
+extract_air_task >> transform_air_task
+extract_traffic_task >> transform_traffic_task
