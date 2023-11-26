@@ -25,4 +25,3 @@ extract_traffic_task = PythonOperator(
     python_callable=extract_traffic_jam.main,
     dag=etl_dag
 )
-
