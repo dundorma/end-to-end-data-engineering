@@ -1,6 +1,8 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, to_timestamp, when, lit, lag, lead
 from pyspark.sql.window import Window
+import os
+import shutil
 
 def replace_outliers_with_mean_adjacent(df, max_values):
     '''handle distinguish value by replace with adjacent mean'''
@@ -24,9 +26,23 @@ def consistent_dtype(df, dtype):
 def saveToCSV(df) :
   try:
     # Save the DataFrame to a CSV file
-    output_path = '/opt/airflow/transform_data/traffic_jam_data.csv'
-    df.write.csv(output_path, header=True, mode='append')
-    print(f"Data successfully saved to {output_path}")
+    output_temp = '/opt/airflow/transform_data_temp/traffic_jam_data'
+    df.write.csv(output_temp, header=True, mode='append')
+    print(f"Data successfully saved temp data to {output_temp}")
+
+    temp_filenames = os.listdir(output_temp)
+    temp_csv_file = ""
+    for f in temp_filenames:
+      if f.endswith(".csv"):
+        temp_csv_file = f
+
+    output_path = "/opt/airflow/transform_data/"
+    os.makedirs(output_path, exist_ok=True)
+    shutil.copy(output_temp + "/" + temp_csv_file, output_path + "traffic_jam_data.csv")
+
+    print(f"Data successfully saved data to {output_path + 'traffic_jam_data.csv'}")
+    shutil.rmtree(output_temp)
+    print(f"successfully removed temp dir")
   except IOError as e:
     print(f"Error while saving data: {e}")
 
