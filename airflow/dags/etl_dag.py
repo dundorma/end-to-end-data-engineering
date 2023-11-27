@@ -11,7 +11,7 @@ import etl.load as etl_load
 etl_dag = DAG(
     dag_id = "etl_dag",
     default_args={"start_date": "2023-11-25"},
-    schedule="@daily"
+    schedule="0 0 * * *"
 )
 
 extract_air_task = PythonOperator(
@@ -38,6 +38,14 @@ transform_traffic_task = PythonOperator(
     dag=etl_dag
 )
 
+load_task = PythonOperator(
+    task_id="load_to_psql",
+    python_callable=etl_load.main,
+    dag=etl_dag
+)
 
 extract_air_task >> transform_air_task
 extract_traffic_task >> transform_traffic_task
+
+transform_air_task >> load_task
+transform_traffic_task >> load_task
