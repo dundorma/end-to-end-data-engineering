@@ -17,7 +17,7 @@ def traffic_jam_square_querystring(lonlat, n_instance, different):
     return querystring
 
 def main():
-    api_key = 'be11409435msha86e2ce00381450p146ce7jsn7e19a682ab57'
+    api_key = '8081f01e1emsh3e955d0505d9bd1p17ae86jsn4cf8e2b5cf2c'
     api_key_2 = 'f7de1c1538msh9828d5bb47e0fafp1d417djsne7bc6e6aadfd'
     api_key_3 = '13ea0f185fmsh1c0a151cd986134p1eb9b9jsnb182941b30a9'
 

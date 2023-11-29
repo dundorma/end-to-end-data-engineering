@@ -5,7 +5,7 @@ import requests
 def main():
     api_key = 'be11409435msha86e2ce00381450p146ce7jsn7e19a682ab57'
     api_key_2 = 'f7de1c1538msh9828d5bb47e0fafp1d417djsne7bc6e6aadfd'
-    api_key_3 = ['8081f01e1emsh3e955d0505d9bd1p17ae86jsn4cf8e2b5cf2c','76349352a2msh7814e54a9af5a9dp1ae144jsn004f26c6d200']
+    api_key_3 = ['cb22b40a98mshc67e59ce85c6963p1dc4e9jsnc5136bea851a','b9f43e2336msh60de50403522ee1p1514f7jsn5903cc1f7c5e']
 
     jams_df_drop = pd.read_csv('/opt/airflow/transform_data/traffic.csv')
     df_traffic_groupby_city = jams_df_drop.groupby('city')[['latitude','longitude']].agg({"mean"})
