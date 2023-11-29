@@ -7,11 +7,12 @@ import etl.extract_traffic_jam as extract_traffic_jam
 import etl.transform_air_quality as transform_air_quality
 import etl.transform_traffic_jam as transform_traffic_jam
 import etl.load as etl_load
+import etl.cleanup as cleanup
 
 etl_dag = DAG(
     dag_id = "etl_dag",
     default_args={"start_date": "2023-11-25"},
-    schedule="0 0 * * *"
+    schedule="0 0 */3 * *"
 )
 
 extract_air_task = PythonOperator(
@@ -44,8 +45,13 @@ load_task = PythonOperator(
     dag=etl_dag
 )
 
-extract_air_task >> transform_air_task
-extract_traffic_task >> transform_traffic_task
+cleanup_task = PythonOperator(
+    task_id="cleanup_task",
+    python_callable=cleanup.main,
+    dag=etl_dag
+)
 
-transform_air_task >> load_task
-transform_traffic_task >> load_task
+extract_traffic_task >> transform_traffic_task >> extract_air_task
+extract_air_task >> transform_air_task >> load_task
+
+load_task >> cleanup_task
