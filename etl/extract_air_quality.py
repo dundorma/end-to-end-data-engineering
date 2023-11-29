@@ -11,7 +11,6 @@ def main():
     df_traffic_groupby_city = jams_df_drop.groupby('city')[['latitude','longitude']].agg({"mean"})
     df_air_quality = pd.DataFrame()
 
-    row_limit = 2 # len(df_traffic_groupby_city) dilimit untuk experimental supaya tidak kehabisan kredit fetch
     url = "https://air-quality.p.rapidapi.com/history/airquality"
 
     headers = {
@@ -20,7 +19,7 @@ def main():
     }
 
     # Loop melalui setiap baris pada DataFrame Group city
-    for index, row in df_traffic_groupby_city.iloc[:row_limit].iterrows():
+    for index, row in df_traffic_groupby_city.iloc[:].iterrows():
         lon = str(row['longitude'].values[0])
         lat = str(row['latitude'].values[0])
         city = index
