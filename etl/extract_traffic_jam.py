@@ -1,46 +1,54 @@
-import requests
-import os
 import pandas as pd
+import os
+import json
+import requests
+import numpy as np
 
-def saveToCSV(data) :
-  data_to_save = data['data']['jams']
-  df = pd.DataFrame(data_to_save)
+def traffic_jam_square_querystring(lonlat, n_instance, different):
+    # Mengambil nilai longitude dan latitude dari lonlat
+    lon = float(lonlat["lon"])
+    lat = float(lonlat["lat"])
 
-  current_directory = os.path.dirname(os.path.abspath(__file__))
-  raw_data_folder = os.path.join(current_directory, '../raw_data')
-  csv_file_path = os.path.join(raw_data_folder, 'traffic_jam_data.csv')
+    querystring = {f"bottom_left":"","top_right":"","max_alerts":{str(n_instance)},"max_jams":{str(n_instance)}}
+    # Menyusun titik tengah sebagai bottom_left dan top_right
+    querystring["bottom_left"] = f"{lat-different},{lon-different}"
+    querystring["top_right"] = f"{lat+different},{lon+different}"
 
-  try:
-    # Save the DataFrame to a CSV file
-    df.to_csv(csv_file_path, index=False, mode= 'w', header = True)
-    print(f"Data successfully saved to {csv_file_path}")
-  except IOError as e:
-    print(f"Error while saving data: {e}")
-
-def fetchData(api):
-  try:
-      response = requests.get(api['url'], headers = api["headers"], params = api['params'])
-      if response.status_code == 200:
-          data = response.json()
-          print("Data retrieved successfully:")
-          return data
-      else:
-          print(f"Request failed with status code {response.status_code}")
-#   
-  except requests.RequestException as e:
-      print(f"Request encountered an error: {e}")
+    return querystring
 
 def main():
-  trafficJams = {
-    'url': 'https://waze.p.rapidapi.com/alerts-and-jams',
-    'params' : {"bottom_left":"-6.37477,106.6651","top_right":"-6.05441,106.9804","max_alerts":"20","max_jams":"1000"}, 
-    'headers' : {
-    	"X-RapidAPI-Key": "37757523d9mshedf13855fb8cf03p11c892jsnaafe180e14ab",
-    	"X-RapidAPI-Host": "waze.p.rapidapi.com"
+    api_key = 'be11409435msha86e2ce00381450p146ce7jsn7e19a682ab57'
+    api_key_2 = 'f7de1c1538msh9828d5bb47e0fafp1d417djsne7bc6e6aadfd'
+    api_key_3 = '13ea0f185fmsh1c0a151cd986134p1eb9b9jsnb182941b30a9'
+
+    lonlat = {"lon":"106.816666", "lat":"-6.200000"} #Jakarta
+    updated_querystring = traffic_jam_square_querystring(lonlat, 300, 0.4)
+
+    url = "https://waze.p.rapidapi.com/alerts-and-jams"
+    headers = {
+	    "X-RapidAPI-Key": api_key,
+	    "X-RapidAPI-Host": "waze.p.rapidapi.com"
     }
-  }
-  data = fetchData(trafficJams)
-  saveToCSV(data)
+    response = requests.get(url, headers=headers, params=updated_querystring)
+
+    json_formatted_str = json.dumps(response.json()['data']['jams'], indent=2)
+    jams_df = pd.DataFrame(response.json()["data"]["jams"])
+    array_jams = response.json()["data"]["jams"]
+
+    for jams in array_jams:
+      latitudes = np.mean(np.array([coord['lat'] for coord in jams['line_coordinates']]))
+      longitudes = np.mean(np.array([coord['lon'] for coord in jams['line_coordinates']]))
+      jams['latitude'] = latitudes
+      jams['longitude'] = longitudes
+
+    jams_df = pd.DataFrame(array_jams)
+
+    # EXTRACT SAVE CSV
+    # Making sure the directory to save the pdf exists
+    output_path = "/opt/airflow/raw_data/"
+    os.makedirs(output_path, exist_ok=True)
+
+    jams_df.to_csv(output_path + 'traffic.csv', index=False)
 
 if __name__ == "__main__":
-  main()
+    main()
