@@ -8,7 +8,7 @@ def main():
     transformed_air_df = pd.read_csv('/opt/airflow/transform_data/air_quality.csv')
 
     #Connection String
-    db_engine = sqlalchemy.create_engine("postgresql+psycopg2://kelompokq@rekdat:qbsPhPKUZqPtKdVj8U8mEhXgmGtfRCjerZchhGgyNPdyFSPk3r982ED3JE3KwkaG@rekdat.postgres.database.azure.com:5432/rekdat")
+    db_engine = sqlalchemy.create_engine("redacted")
 
     #Load Transformed Traffic Jam
     transformed_traffic_df.to_sql(
